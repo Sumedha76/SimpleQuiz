@@ -3,7 +3,6 @@ import java.util.Scanner;
 import java.lang.String;
 
 
-
 //Questions for quiz
 class Question_Bank
 {
@@ -16,7 +15,7 @@ class Question_Bank
 
 
     //Second round questions
-    String questions_2[]={"1. What is the name of the world's largest desert (excluding Antarctica)?","2. What is the largest bone in the human body?","3. In which year did World War II begin?","4. What is the name of the famous leaning tower in Italy?","5. What is the chemical symbol for water?","6. What is the largest freshwater lake by volume?","7. Who wrote the famous play \"Hamlet\"? " };
+    String questions_2[]={"1. What is the name of the world's largest desert ?","2. What is the largest bone in the human body?","3. In which year did World War II begin?","4. What is the name of the famous leaning tower in Italy?","5. What is the chemical symbol for water?","6. What is the largest freshwater lake by volume?","7. Who wrote the famous play \"Hamlet\"? " };
 
     //Second round answers
     String answers_2[]={"The Sahara Desert","thigh bone","1939","The Leaning Tower of Pisa","H2O","Lake Baikal","William Shakespeare"};
@@ -113,15 +112,20 @@ class points
 //Main 
 public class Quizgame
 {
+    static void display_results(int round,int []results,int number_of_questions)
+    {
+        System.out.println("\n\nResult of Round "+round+":\nNumber of questions: "+number_of_questions+"\nCorrect Answer: "+ results[1]+"\nWrong Answer: "+results[2]+"\nUnanswered: "+results[3]+"\n\n"+"Total Points: "+results[0]+"\nTotal Time taken: "+results[4]+" seconds");
+    }
     public static void main(String []args)
     {
         Scanner input = new Scanner(System.in);
     
-        System.out.println("-------- General Knowledge Quiz -------");
+        System.out.println("\n-------- General Knowledge Quiz -------");
         System.out.println("Enter your name");
 
-        //Accepts player name
-        String player_name =input.nextLine();
+        //Input player name
+        String name =input.nextLine();
+        String player_name=name.substring(0,1).toUpperCase()+name.substring(1);
 
         //object of class points 
         points p =new points();
@@ -129,7 +133,7 @@ public class Quizgame
         //Default value
         int number_of_rounds=0;
 
-        System.out.println("Hi "+player_name+"!"+"\nEnter the number of rounds you wish to play \n(Remember as the level increases, the difficulty increase and you need to score atleaset 60% to advance to next level\nmax:3)  ");
+        System.out.println("\nHi "+player_name+"!"+"\nEnter the number of rounds you wish to play \n(Difficulty increases with each round. Min 60% to progress. Max 3 rounds )\n");
 
         //Number of rounds the player wants to play
         number_of_rounds=input.nextInt();
@@ -159,7 +163,7 @@ public class Quizgame
     double player_points=1000; // The points player has before game starts
     
 
-    double  correct_answer_factor=0.1, wrong_answer_factor=0.1; // Multiplier factor for correct and wrong answer respectively
+    double  correct_answer_factor=0.5, wrong_answer_factor=0.5; // Multiplier factor for correct and wrong answer respectively
 
     //Array to store the result of round 1
     int[] result_round_1 = new int[5];
@@ -170,9 +174,6 @@ public class Quizgame
 
     for(int rounds=1;rounds<=number_of_rounds;rounds++)
     {   
-        
-        
-
         int initial_points=1000;
 
         //Maximum points for round 1 (considering that averge time taken to answer each question is 15 seconds)
@@ -180,7 +181,7 @@ public class Quizgame
 
        
         if(rounds==1){
-        System.out.println("---------Beginner Level---------");
+        System.out.println("\n---------Beginner Level---------");
         result_round_1=p.game_body(0,number_of_questions_1,player_points,question_Bank,correct_answer_factor,wrong_answer_factor);
         player_points= (double)result_round_1[0];
 
@@ -192,6 +193,7 @@ public class Quizgame
             else
             {
                 System.out.println("\n\nOpps! Better Luck Next Time");
+                display_results(1,result_round_1, number_of_questions_1);
                 break;
             }
         }
@@ -199,14 +201,10 @@ public class Quizgame
         //Display the results if player plays only one round
         if(number_of_rounds ==1 )
         {
-            System.out.println("\nRound 1 statistics:"+"\nTotal Points: "+result_round_1[0]+"\nTotal Time taken: (in seconds) "+result_round_1[4]+"\nNumber of questions: "+number_of_questions_1+"\nCorrect Answer: "+ result_round_1[1]+"\nWrong Answer: "+result_round_1[2]+"\nUnanswered: "+result_round_1[3]);
-
+            display_results(1,result_round_1, number_of_questions_1);
             break;
         }
         
-        
-        
-
         //Maximum points for round 2 (considering that averge time taken to answer each question is 20 seconds)
         int total_2=(int)(total_1+(correct_answer_factor*number_of_questions_2)/(20*number_of_questions_2));
         if(rounds==2){
@@ -223,16 +221,17 @@ public class Quizgame
             else
             {
                 System.out.println("\n\nOpps! Better Luck Next Time");
+                display_results(1,result_round_1, number_of_questions_1);
+                display_results(2,result_round_2, number_of_questions_2);
+                break;
             }
             }
 
             //Display the results of round 2 if the maximum number of rounds played is 2
             if(number_of_rounds==2 && rounds==2)
             {
-                System.out.println("\nRound 1 statistics:"+"\nTotal Points: "+result_round_1[0]+"\nTotal Time taken (in seconds): "+result_round_1[4]+"\nNumber of questions: "+number_of_questions_1+"\nCorrect Answer: "+ result_round_1[1]+"\nWrong Answer: "+result_round_1[2]+"\nUnanswered: "+result_round_1[3]);
-                System.out.println("\nRound 2 statistics:"+"\nTotal Points: "+result_round_2[0]+"\nTotal Time taken (in seconds): "+result_round_1[4]+"\nNumber of questions: "+number_of_questions_2+"\nCorrect Answer: "+ result_round_2[1]+"\nWrong Answer: "+result_round_2[2]+"\nUnanswered: "+result_round_2[3]);
-                
-               
+                display_results(1,result_round_1, number_of_questions_1);
+                display_results(2,result_round_2, number_of_questions_2);
                 break;
             }
 
@@ -255,16 +254,19 @@ public class Quizgame
                 else
                 {
                     System.out.println("\n\nOpps! Better Luck Next Time");
+                    display_results(1,result_round_1, number_of_questions_1);
+                    display_results(2,result_round_2, number_of_questions_2);
+                    display_results(3,result_round_3, number_of_questions_3);
+                    break;
                 }
                 }
 
                //Display the results of round 3
                 if(number_of_rounds==3&& rounds==3)
                 {
-                    System.out.println("\nRound 1 statistics:"+"\nTotal Points: "+result_round_1[0]+"\nTotal Time taken (in seconds): "+result_round_1[4]+"\nNumber of questions: "+number_of_questions_1+"\nCorrect Answer: "+ result_round_1[1]+"\nWrong Answer: "+result_round_1[2]+"\nUnanswered: "+result_round_1[3]);
-                    System.out.println("\nRound 2 statistics:"+"\nTotal Points: "+result_round_2[0]+"\nTotal Time taken (in seconds): "+result_round_1[4]+"\nNumber of questions: "+number_of_questions_2+"\nCorrect Answer: "+ result_round_2[1]+"\nWrong Answer: "+result_round_2[2]+"\nUnanswered: "+result_round_2[3]);
-                    System.out.println("\nRound 3 statistics:"+"\nTotal Points: "+result_round_3[0]+"\nTotal Time taken (in seconds): "+result_round_3[4]+"\nNumber of questions: "+number_of_questions_3+"\nCorrect Answer: "+ result_round_3[1]+"\nWrong Answer: "+result_round_3[2]+"\nUnanswered: "+result_round_3[3]);
-                    
+                    display_results(1,result_round_1, number_of_questions_1);
+                    display_results(2,result_round_2, number_of_questions_2);
+                    display_results(3,result_round_3, number_of_questions_3);  
                 }
         
         correct_answer_factor+=0.1; //Increment correct_answer_factor when current round completes
