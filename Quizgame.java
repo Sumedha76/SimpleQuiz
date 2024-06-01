@@ -59,6 +59,7 @@ class points
         int number_of_correct_answers=0;
         int number_of_wrong_answers=0;
         int number_of_unanswered=0;
+        @SuppressWarnings("resource")
         Scanner input = new Scanner(System.in);
         int initial_points=1000;
         for(int questions=0;questions < number_of_questions; questions++) //Loop until all the questions are completed in the current round
@@ -70,7 +71,6 @@ class points
         System.out.println("\n"+question_Bank.questions[round][questions]);
         
         //Accept the answer 
-        
         String player_answer=input.nextLine();
         
         
@@ -100,9 +100,7 @@ class points
         }
 
         }
-        input.close();
-
-
+        
         //result of the current round
         int[] result= {(int)player_points,number_of_correct_answers,number_of_wrong_answers,number_of_unanswered,total_time_taken}; 
 
@@ -136,7 +134,7 @@ public class Quizgame
         //Number of rounds the player wants to play
         number_of_rounds=input.nextInt();
 
-        
+            input.nextLine();
             System.out.println("Enter number of questions you wish to have in first round (max: 10)");
             //Take input for only first round 
             int number_of_questions_1 = input.nextInt();
@@ -163,10 +161,17 @@ public class Quizgame
 
     double  correct_answer_factor=0.1, wrong_answer_factor=0.1; // Multiplier factor for correct and wrong answer respectively
 
+    //Array to store the result of round 1
+    int[] result_round_1 = new int[5];
+    //Array to store results of round 2
+    int []result_round_2 = new int[5];
+    //Array to store result of round 3
+    int []result_round_3 = new int[5];
+
     for(int rounds=1;rounds<=number_of_rounds;rounds++)
     {   
-        //Array to store the result of round 1
-        int[] result_round_1 = new int[5];
+        
+        
 
         int initial_points=1000;
 
@@ -200,18 +205,14 @@ public class Quizgame
         }
         
         
-        //Array to store results of round 2
-        int []result_round_2 = new int[5];
+        
 
         //Maximum points for round 2 (considering that averge time taken to answer each question is 20 seconds)
         int total_2=(int)(total_1+(correct_answer_factor*number_of_questions_2)/(20*number_of_questions_2));
         if(rounds==2){
             
             System.out.println("\n---------Intermediate Level---------");
-           String s=input.nextLine();
-            if(s.isEmpty())
-            System.out.println("Enter 1 if you want to continue to this round");
-            input.nextInt();
+           
             result_round_2=p.game_body(1,number_of_questions_2,player_points,question_Bank,correct_answer_factor,wrong_answer_factor);
             player_points= (double)result_round_2[0];
 
@@ -235,17 +236,16 @@ public class Quizgame
                 break;
             }
 
-            //Array to store result of round 3
-            int []result_round_3 = new int[5];
+            
 
             //Maximum points for round 2 (considering that averge time taken to answer each question is 30 seconds)
             float total_3=(float)(total_2+(correct_answer_factor*number_of_questions_3)/(30*number_of_questions_3));
             if(rounds==3){
                 
-                System.out.println("---------Difficult Level---------");
+                System.out.println("\n---------Difficult Level---------");
                 input.nextLine();
                 result_round_3=p.game_body(2,number_of_questions_2,player_points,question_Bank,correct_answer_factor,wrong_answer_factor);
-                player_points= (double)result_round_2[0];
+                player_points= (double)result_round_2[0]; //player points after second round
 
 
                 if (player_points>= 0.6*total_3)
