@@ -137,6 +137,11 @@ public class Quizgame
 
         //Number of rounds the player wants to play
         number_of_rounds=input.nextInt();
+        if(number_of_rounds>3||number_of_rounds<=0)
+        {
+            System.out.println("Invalid input");
+            System.exit(0);
+        }
 
             input.nextLine();
             System.out.println("Enter number of questions you wish to have in first round (max: 10)");
