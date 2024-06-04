@@ -2,7 +2,6 @@
 import java.util.Scanner;
 import java.lang.String;
 
-
 //Questions for quiz
 class Question_Bank
 {
